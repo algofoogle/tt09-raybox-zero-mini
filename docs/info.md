@@ -9,12 +9,7 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+This is an attempt to create a really small version of [raybox-zero](https://github.com/algofoogle/raybox-zero) (previously submitted to TT04 and TT07) that can fit in fewer tiles on TT09.
 
-## How to test
+It cuts out some features in order to do that.
 
-Explain how to use your project
-
-## External hardware
-
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any

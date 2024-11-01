@@ -5,7 +5,24 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v
+PROJECT_SOURCES = \
+	rbz_options.v								\
+	raybox-zero/src/rtl/fixed_point_params.v	\
+	raybox-zero/src/rtl/helpers.v				\
+	raybox-zero/src/rtl/debug_overlay.v			\
+	raybox-zero/src/rtl/lzc.v					\
+	raybox-zero/src/rtl/map_overlay.v			\
+	raybox-zero/src/rtl/map_rom.v				\
+	raybox-zero/src/rtl/pov.v					\
+	raybox-zero/src/rtl/reciprocal.v			\
+	raybox-zero/src/rtl/row_render.v			\
+	raybox-zero/src/rtl/spi_registers.v			\
+	raybox-zero/src/rtl/vga_mux.v				\
+	raybox-zero/src/rtl/vga_sync.v				\
+	raybox-zero/src/rtl/wall_tracer.v			\
+	raybox-zero/src/rtl/rbzero.v				\
+	project.v
+#	raybox-zero/src/rtl/top_raybox_zero_fsm.v
 
 ifneq ($(GATES),yes)
 
@@ -40,3 +57,13 @@ MODULE = test
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim
+
+clean_frames:
+	rm -rf frames_out/*.ppm
+	rm -rf frames_out/*.png
+
+animate:
+	./animate.sh --
+
+wave:
+	gtkwave tb.vcd tb.gtkw
