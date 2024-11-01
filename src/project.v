@@ -26,7 +26,7 @@ module tt_um_algofoogle_raybox_zero_mini (
   // FIX `define TRACE_STATE_DEBUG in rbzero.v
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{uio_in[1:0], uio_in[7:5], ena, 1'b0};
+  wire _unused = &{ui_in[7], uio_in[1:0], uio_in[7:5], ena, 1'b0};
 
   wire  [5:0] rgb;
   wire        vsync_n, hsync_n;
@@ -45,8 +45,8 @@ module tt_um_algofoogle_raybox_zero_mini (
 
   wire [9:0] hpos, vpos;
 
-  wire o_tex_oeb0;
-  wire [3:0] i_tex_in = {1'b0, uio_in[7:5]}; //NOTE: io[3] is unused, currently.
+  // wire o_tex_oeb0;
+  // wire [3:0] i_tex_in = {1'b0, uio_in[7:5]}; //NOTE: io[3] is unused, currently.
 
   wire debug = ui_in[3];
 
