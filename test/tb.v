@@ -43,6 +43,10 @@ module tb ();
   wire [7:0] uio_in;      // Bidir IOs: Input path
   wire [7:0] uio_out;     // Bidir IOs: Output path
   wire [7:0] uio_oe;      // Bidir IOs: Enable path (active high: 0=input, 1=output).
+`ifdef GL_TEST
+  wire VPWR = 1'b1;
+  wire VGND = 1'b0;
+`endif
 
   // Specific outputs for raybox-zero:
   // RrGgBb and H/Vsync pin ordering is per Tiny VGA PMOD
@@ -87,6 +91,11 @@ module tb ();
   // assign tex_io[2] = 1'b1;
 
   tt_um_algofoogle_raybox_zero_mini user_project (
+      // Include power ports for the Gate Level test:
+`ifdef GL_TEST
+      .VPWR(VPWR),
+      .VGND(VGND),
+`endif
       .ui_in  (ui_in),    // Dedicated inputs
       .uo_out (uo_out),   // Dedicated outputs
       .uio_in (uio_in),   // IOs: Input path
