@@ -38,10 +38,10 @@ def check_uio_out(dut):
 # This can represent hard-wired stuff:
 def set_default_start_state(dut):
     dut.ena.value                   = 1
-    # POV SPI interface inactive:
-    dut.pov_sclk.value              = 1
-    dut.pov_mosi.value              = 1
-    dut.pov_ss_n.value              = 1
+    # # POV SPI interface inactive:
+    # dut.pov_sclk.value              = 1
+    # dut.pov_mosi.value              = 1
+    # dut.pov_ss_n.value              = 1
     # REG SPI interface also inactive:
     dut.reg_sclk.value              = 1
     dut.reg_mosi.value              = 1
