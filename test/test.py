@@ -252,8 +252,8 @@ async def test_frames(dut):
             cocotb.start_soon(spi_send_reg(dut, 2, 25, 'set LEAK=25'))
 
         elif nframe == 13:
-            # Set VSHIFT of 10:
-            cocotb.start_soon(spi_send_reg(dut, 4, 10, 'set VSHIFT=10'))
+            # Set VSHIFT of 53:
+            cocotb.start_soon(spi_send_reg(dut, 4, 53, 'set VSHIFT=53'))
 
         elif nframe == 14:
             # Turn off LEAK_FIXED:
