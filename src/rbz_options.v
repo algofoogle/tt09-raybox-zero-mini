@@ -1,3 +1,4 @@
+`define RBZ_OPTIONS // Simply used to help with Verilator linting in VSCode.
 // This file is only used by compilation/synthesis/simulation targets to specify which options
 // we want, and it's expect this file will be part of whatever project/target is hosting the
 // core raybox-zero code to specify conditional compilation.
