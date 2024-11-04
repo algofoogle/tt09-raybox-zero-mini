@@ -13,7 +13,6 @@ PROJECT_SOURCES = \
 	raybox-zero/src/rtl/lzc.v					\
 	raybox-zero/src/rtl/map_overlay.v			\
 	raybox-zero/src/rtl/map_rom.v				\
-	raybox-zero/src/rtl/pov.v					\
 	raybox-zero/src/rtl/reciprocal.v			\
 	raybox-zero/src/rtl/row_render.v			\
 	raybox-zero/src/rtl/spi_registers.v			\
@@ -22,6 +21,7 @@ PROJECT_SOURCES = \
 	raybox-zero/src/rtl/wall_tracer.v			\
 	raybox-zero/src/rtl/rbzero.v				\
 	project.v
+#	raybox-zero/src/rtl/pov.v					# Not used if using USE_POV_VIA_SPI_REGS
 #	raybox-zero/src/rtl/top_raybox_zero_fsm.v
 
 ifneq ($(GATES),yes)

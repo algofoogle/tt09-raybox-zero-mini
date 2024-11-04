@@ -19,8 +19,8 @@ function write_h264() {
 }
 
 function write_animated_gif() {
-    #NOTE: -delay 50 sets a 50*10ms (500ms) delay between frames:
-    convert -delay 50 rbz_basic_frame-???.ppm +antialias -font Ubuntu-Mono -fill white -pointsize 18 -gravity South -annotate 0 '%f' "$1"
+    #NOTE: -delay 200 sets a 200*10ms (2s) delay between frames:
+    convert -delay 200 rbz_basic_frame-???.ppm +antialias -font Ubuntu-Mono -fill white -pointsize 18 -gravity South -annotate 0 '%f' "$1"
 }
 
 function anton_default1() {

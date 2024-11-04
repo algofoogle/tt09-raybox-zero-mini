@@ -10,7 +10,7 @@ import re
 
 HIGH_RES        = float(env.get('HIGH_RES')) if 'HIGH_RES' in env else None # If not None, scale H res by this, and step by CLOCK_PERIOD/HIGH_RES instead of unit clock cycles.
 CLOCK_PERIOD    = float(env.get('CLOCK_PERIOD') or 40.0) # Default 40.0 (period of clk oscillator input, in nanoseconds)
-FRAMES          =   int(env.get('FRAMES')       or   12) # Default 12 (total frames to render)
+FRAMES          =   int(env.get('FRAMES')       or   15) # Default 15 (total frames to render)
 INC_PX          =   int(env.get('INC_PX')       or    1) # Default 1 (inc_px on)
 INC_PY          =   int(env.get('INC_PY')       or    1) # Default 1 (inc_py on)
 # GEN_TEX         =   int(env.get('GEN_TEX')      or    0) # Default 0 (use tex ROM; no generated textures)
@@ -61,14 +61,14 @@ class SPI:
     def __init__(self, dut, interface):
         self.dut = dut
         self.interface = interface
-        if interface == 'pov':
-            self.csb = dut.pov_ss_n
-            self.sclk = dut.pov_sclk
-            self.mosi = dut.pov_mosi
-        elif interface == 'reg':
+        if interface == 'reg':
             self.csb = dut.reg_ss_n
             self.sclk = dut.reg_sclk
             self.mosi = dut.reg_mosi
+        elif interface == 'pov':
+            self.csb = dut.pov_ss_n
+            self.sclk = dut.pov_sclk
+            self.mosi = dut.pov_mosi
         else:
             raise ValueError(f"Invalid interface {repr(interface)}; must be 'pov' or 'reg'")
 
@@ -120,14 +120,22 @@ async def spi_send_reg(dut, cmd, data, what=''):
     await spi.txn_stop()
     dut._log.info(f"spi_send_reg() [{what}] DONE")
 
-
 async def spi_send_pov(dut, data, what=''):
     dut._log.info(f"spi_send_pov({repr(data)}) started [{what}]...")
-    spi = SPI(dut, 'pov')
+    spi = SPI(dut, 'reg')
     await spi.txn_start()
+    await spi.txn_send(11, 4) # 11==CMD_POV
     await spi.txn_send(data, 74)
     await spi.txn_stop()
     dut._log.info(f"spi_send_pov() [{what}] DONE")
+
+# async def spi_send_pov(dut, data, what=''):
+#     dut._log.info(f"spi_send_pov({repr(data)}) started [{what}]...")
+#     spi = SPI(dut, 'pov')
+#     await spi.txn_start()
+#     await spi.txn_send(data, 74)
+#     await spi.txn_stop()
+#     dut._log.info(f"spi_send_pov() [{what}] DONE")
 
 
 @cocotb.test()
@@ -225,7 +233,7 @@ async def test_frames(dut):
 
         elif nframe == 8:
             # Turn on VINF (cmd 5) mode:
-            cocotb.start_soon(spi_send_reg(dut, 5, '1', 'turn on VINF')) # '1' because we have a SINGLE bit to send.
+            cocotb.start_soon(spi_send_reg(dut, 5, '10', 'turn on VINF')) # '10' because we have a TWO bits to send instead of 6.
 
         elif nframe == 9:
             # Turn off floor leak:
@@ -236,8 +244,21 @@ async def test_frames(dut):
             pass # Placeholder for dut.gen_tex.value = 1 in IMMEDIATE inputs, below.
 
         elif nframe == 11:
-            # Turn off VINF:
-            cocotb.start_soon(spi_send_reg(dut, 5, '0', 'turn off VINF'))
+            # Turn off VINF, turn ON LEAK_FIXED:
+            cocotb.start_soon(spi_send_reg(dut, 5, '01', 'turn off VINF, turn ON LEAK_FIXED'))
+
+        elif nframe == 12:
+            # Set LEAK of 25:
+            cocotb.start_soon(spi_send_reg(dut, 2, 25, 'set LEAK=25'))
+
+        elif nframe == 13:
+            # Set VSHIFT of 10:
+            cocotb.start_soon(spi_send_reg(dut, 4, 10, 'set VSHIFT=10'))
+
+        elif nframe == 14:
+            # Turn off LEAK_FIXED:
+            cocotb.start_soon(spi_send_reg(dut, 5, '00', 'turn off VINF, turn off LEAK_FIXED'))
+
 
         # # Now handle IMMEDIATE inputs that take effect on the current frame,
         # # rather than the next:

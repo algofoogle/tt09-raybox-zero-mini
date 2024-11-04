@@ -26,7 +26,7 @@ module tt_um_algofoogle_raybox_zero_mini (
   // FIX `define TRACE_STATE_DEBUG in rbzero.v
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ui_in[7], uio_in[1:0], uio_in[7:5], ena, 1'b0};
+  wire _unused = &{ui_in[7], uio_in[7:0], ena, 1'b0};
 
   wire  [5:0] rgb;
   wire        vsync_n, hsync_n;
@@ -54,16 +54,22 @@ module tt_um_algofoogle_raybox_zero_mini (
     .clk        (clk),
     .reset      (~rst_n),
 
-    // SPI peripheral interface for updating vectors:
-    .i_sclk     (ui_in[0]),
-    .i_mosi     (ui_in[1]),
-    .i_ss_n     (ui_in[2]),
+    //NOTE: The following are commented out because we're using USE_POV_VIA_SPI_REGS:
+    // // SPI peripheral interface for updating vectors:
+    // .i_sclk     (ui_in[0]),
+    // .i_mosi     (ui_in[1]),
+    // .i_ss_n     (ui_in[2]),
+    // // SPI peripheral interface for everything else:
+    // .i_reg_sclk (uio_in[2]),
+    // .i_reg_mosi (uio_in[3]),
+    // .i_reg_ss_n (uio_in[4]),
 
-    // SPI peripheral interface for everything else:
-    .i_reg_sclk (uio_in[2]),
-    .i_reg_mosi (uio_in[3]),
-    .i_reg_ss_n (uio_in[4]),
+    // SPI peripheral interface for updating registers and POV:
+    .i_reg_sclk (ui_in[0]),
+    .i_reg_mosi (ui_in[1]),
+    .i_reg_ss_n (ui_in[2]),
 
+    //NOTE: The following are commented out because we're using NO_EXTERNAL_TEXTURES:
     // // SPI controller interface for reading SPI flash memory (i.e. textures):
     // .o_tex_csb  (uio_out[0]),
     // .o_tex_sclk (uio_out[1]),
@@ -72,8 +78,9 @@ module tt_um_algofoogle_raybox_zero_mini (
     // .i_tex_in   (i_tex_in), //NOTE: io[3] is unused, currently.
     
     // Debug/demo signals:
-    .i_debug_m  (debug), // Map debug overlay
-    .i_debug_t  (debug), // Trace debug overlay
+    //NOTE: These are commented out because they're disabled in this tt09 implementation:
+    // .i_debug_m  (debug), // Map debug overlay
+    // .i_debug_t  (debug), // Trace debug overlay
     .i_debug_v  (debug), // Vectors debug overlay
     .i_inc_px   (ui_in[4]),
     .i_inc_py   (ui_in[5]),

@@ -25,9 +25,10 @@ module tb ();
   reg rst_n;
   reg ena;
   // Specific inputs for raybox-zero:
-  reg pov_sclk;
-  reg pov_mosi;
-  reg pov_ss_n;
+  //NOTE: These are commented out because we're using USE_POV_VIA_SPI_REGS:
+  // reg pov_sclk;
+  // reg pov_mosi;
+  // reg pov_ss_n;
   reg debug;
   reg inc_px;
   reg inc_py;
@@ -64,23 +65,30 @@ module tb ();
   // wire [2:0] tex_io;
 
   assign ui_in = {
-    1'b0, // gen_tex,
+    1'b0, // Unused in this implementation: gen_tex, 
     registered_outputs,
     inc_py,
     inc_px,
     debug,
-    pov_ss_n,
-    pov_mosi,
-    pov_sclk
-  };
-
-  assign uio_in = {
-    3'b000,
+    //NOTE: These are commented out because we're using USE_POV_VIA_SPI_REGS:
+    // pov_ss_n,
+    // pov_mosi,
+    // pov_sclk
+    //...and these are here for the same reason:
     reg_ss_n,
     reg_mosi,
-    reg_sclk,
-    2'b00
+    reg_sclk
   };
+
+  //NOTE: These are commented out because we're using USE_POV_VIA_SPI_REGS:
+  // assign uio_in = {
+  //   3'b000,
+  //   reg_ss_n,
+  //   reg_mosi,
+  //   reg_sclk,
+  //   2'b00
+  // };
+  assign uio_in = 8'b0000_0000;
 
   // assign tex_io[0] =
   //   (uio_oe[5] == 1)  ? uio_out[5]  // raybox-zero is asserting an output.
